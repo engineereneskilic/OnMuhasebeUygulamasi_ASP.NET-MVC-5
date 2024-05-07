@@ -1,0 +1,129 @@
+﻿@model OnMuhasebeUygulamasi.MultipleModelView.CurrentCardswithAC
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+<div style="margin-top:20px;" class="row">
+   
+        <div class="col-lg-12">
+            <div class="col-md-7 col-md-offset-2"><h2 class="alert-info" style="padding:5px;">Cari Kartlar</h2></div> <div class="clearfix"></div>
+            <div class="panel-body col-md-7 col-md-offset-2">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Cari Türü</th>
+                                <th>Cari Kodu</th>
+                                <th>Cari Adı</th>
+                                <th>Bakiye Borç</th>
+                                <th>Bakiye Alacak</th>
+                                <th>PB</th>
+                                <th>İl</th>
+                                <th>İlçe</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ 
+                                string aktif_row = "";
+                            }
+                            @foreach (var item in Model.CurrentCardList)
+                            {
+                                if (Request.Url.Segments.Last() == @item.CurrentCode.ToString()) { aktif_row = "rowSecili"; } else { aktif_row = ""; }
+
+                                <tr onclick="document.location = '/CurrentCards/Index/'+@item.CurrentCode+'';" class="@aktif_row;">
+                                    <td>@item.CurrentType</td>
+                                    <td>@item.CurrentCode</td>
+                                    <td>@item.CurrentName</td>
+                                    <td>@string.Format("{0:C}",item.BalanceDebt)</td>
+                                    <td>@string.Format("{0:C}", item.BalanceCredit)</td>
+                                    <td>@item.Currency</td>
+                                    <td>@string.Format("{0:C}",item.CurrentCardDetail.Province)</td>
+                                    <td>@string.Format("{0:C}",item.CurrentCardDetail.District)</td>
+                                    <td width="400px">
+                                        
+                                        @Html.ActionLink("Düzenle", "Edit", new { id = item.CurrentCode },new { @class= "btn btn-success" }) |
+                                        @Html.ActionLink("Detaylar", "Details", new { id = item.CurrentCode }, new { @class = "btn btn-info" }) |
+                                        @Html.ActionLink("Sil", "Delete", new { id = item.CurrentCode }, new { @class = "btn btn-danger", @style = "margin-top:5px;" })
+                                    </td>
+                                </tr>
+                            }
+                          
+                           
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+                @Html.ActionLink("+ Yeni Ekle", "Create", null, new { @class = "btn btn-primary" }) | <button onclick = "document.location = '/CurrentCards/Index/1'" class="btn btn-default" href="">Yenile</button>
+            </div>
+            @* Hareketler *@
+            <div class="col-md-7 col-md-offset-2"><h2 class="alert-info" style="padding:5px;">Hesap Hareketleri</h2></div> <div class="clearfix"></div>
+            <div class="panel-body col-md-7 col-md-offset-2">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Hareket Tarihi</th>
+                                <th>İşlem SeriNo</th>
+                                <th>İşlem Tipi</th>
+                                <th>Açıklama</th>
+                                <th>Borç</th>
+                                <th>Alacak</th>
+                                <th>PB</th>
+                            </tr>
+                        </thead>
+                        @{ 
+                            string ActionName = "";
+                            string ActionSequanceCode = "";
+                        }
+                        @if (Model.AccountMovementList!= null)
+                        {
+                            <tbody>
+                                @foreach (var item in Model.AccountMovementList)
+                                {
+                                    if (item.ProcessType.IndexOf("Fatura") != -1) { ActionName = "Bill";ActionSequanceCode =  Convert.ToString(item.SequenceNo); }
+                                    else
+                                    if (item.ProcessType.IndexOf("Havale") != -1) { ActionName = "Bank";ActionSequanceCode =  Convert.ToString(item.SequenceNo); }
+
+                                    <tr onclick="document.location = '/@ActionName/Index/@ActionSequanceCode';">
+                                        <td>@item.MovementDate.Value.Date.ToShortDateString()</td>
+                                        <td>@item.SequenceNo</td>
+                                        <td>@item.ProcessType</td>
+                                        <td>@item.Descript</td>
+                                        <td>@string.Format("{0:C}",item.Debt)</td>
+                                        <td>@string.Format("{0:C}",item.Credit)</td>
+                                        <td>@item.Currency</td>
+                                        <td>
+
+                                            @*@Html.ActionLink("Düzenle", "Edit", new { id = item.AccountMovementCode }, new { @class = "btn btn-success" }) |*@
+                                            <a href="/@ActionName/Index/@ActionSequanceCode" class="btn btn-info">Detaylar</a>
+                                            @*@Html.ActionLink("Sil", "Delete", new { id = item.AccountMovementCode }, new { @class = "btn btn-danger", @style = "margin-top:5px;" })*@
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        }
+                    </table>
+                    @if (Model.AccountMovementList == null)
+                    {
+                        <h5 class="alert alert-warning" style="text-align:center;font-size:24px;">Lütfen Cari Kart Seçiniz...</h5>
+                    }
+                </div>
+                <!-- /.table-responsive -->
+                @*@Html.ActionLink("+ Yeni Ekle", "Create", null, new { @class = "btn btn-primary" }) | <button onclick="document.location = '/CurrentCards/Index/@Request.Url.Segments.Last()'" class="btn btn-default" href="">Yenile</button>*@
+                @* GRAFİK *@
+
+
+            </div>
+        </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+
+

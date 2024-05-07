@@ -1,0 +1,162 @@
+﻿@model OnMuhasebeUygulamasi.Models.CurrentCardDetail
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><b style="color:#08B0F9">Current Card Create</b></h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <center><img class="SayfaBaslikResimleri" src="~/Content/img/CariKartlar.png" width="150" /></center>
+                        <center>
+                            <form role="form">
+                                <fieldset style="text-align:right;">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.CurrentCode, "CurrentCode", htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.TextBoxFor(model => model.CurrentCode,  new { @class = "form-control", @readonly = "readonly" , @style = "cursor: no-drop;" })
+                                                @Html.ValidationMessageFor(model => model.CurrentCode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.FirstInformation, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.FirstInformation, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.FirstInformation, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.SecondInformation, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.SecondInformation, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.SecondInformation, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.FirstPhone, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.FirstPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.FirstPhone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.SecondPhone, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.SecondPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.SecondPhone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.FaxNo, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.FaxNo, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.FaxNo, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.GsmNo, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.GsmNo, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.GsmNo, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Province, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Province, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Province, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.District, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.District, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                            <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <a type="button" href="/CurrentCards/Index" class="btn btn-default">Geri Dön</a>
+                                            <input type="submit" value="Create" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

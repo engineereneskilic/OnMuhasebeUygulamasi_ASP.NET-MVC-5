@@ -1,0 +1,242 @@
+﻿@model OnMuhasebeUygulamasi.Models.Stock
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-3">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><b style="color:#08B0F9">Current Card Create</b></h3>
+                    </div>
+                    <div class="panel-body">
+                        <center><img class="SayfaBaslikResimleri" src="~/Content/img/CariKartlar.png" width="150" /></center>
+                        <center>
+                            <form role="form">
+                                <fieldset style="text-align:right;">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockCode, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockCode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockBarcode, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockBarcode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockBarcode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockName, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockComment, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockComment, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockComment, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockType, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockType, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockKDV, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockKDV, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockKDV, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockMainUnitType, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockMainUnitType, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockMainUnitType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockSecondUnitType, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockSecondUnitType, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockSecondUnitType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockThirdUnitType, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockThirdUnitType, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockThirdUnitType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockMainUnit, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockMainUnit, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockMainUnit, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockSecondUnit, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockSecondUnit, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockSecondUnit, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockThirdUnit, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockThirdUnit, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockThirdUnit, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockKDVSalesStatus, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockKDVSalesStatus, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockKDVSalesStatus, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockKDVBuyingStatus, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockKDVBuyingStatus, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockKDVBuyingStatus, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockMainUnitSalesPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockMainUnitSalesPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockMainUnitSalesPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockSecondUnitSalesPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockSecondUnitSalesPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockSecondUnitSalesPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockThirdUnitSalesPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockThirdUnitSalesPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockThirdUnitSalesPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockMainUnitBuyingPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockMainUnitBuyingPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockMainUnitBuyingPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockSecondUnitBuyingPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockSecondUnitBuyingPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockSecondUnitBuyingPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.StockThirdUnitBuyingPrice, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.EditorFor(model => model.StockThirdUnitBuyingPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.StockThirdUnitBuyingPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <a type="button" href="/Stock/Index" class="btn btn-default">Geri Dön</a>
+                                            <input type="submit" value="Create" class="btn btn-default" />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                              </form>
+                            </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+                    }
+

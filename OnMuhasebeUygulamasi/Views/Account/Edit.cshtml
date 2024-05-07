@@ -1,0 +1,87 @@
+﻿@model OnMuhasebeUygulamasi.Models.UserDetailsModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-3">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><b style="color:#08B0F9">Kullanıcı Düzenleme</b></h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <center><img class="SayfaBaslikResimleri" src="~/Content/img/account-icon.png" width="150" /></center>
+                        <center>
+                            <form role="form">
+                                <fieldset style="text-align:left;">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+              
+                                    @Html.HiddenFor(model => model.UDid, new { htmlAttributes = new { @class = "form-control" } })
+
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.RoleName, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                            @Html.DropDownListFor(model => model.Roleid,Model.RoleList.Select(r => new SelectListItem { Text=r.RoleName,Value=r.RoleID.ToString() }), new { @class = "form-control"})
+                                            @Html.ValidationMessageFor(model => model.Roleid, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-lg-6">
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div style="" class="col-md-offset-3 col-md-8">
+                                            <a type="button" href="/Account/UserDetails" class="btn btn-warning">Geri Dön</a> |
+                                            <input type="submit" value="Güncelle" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

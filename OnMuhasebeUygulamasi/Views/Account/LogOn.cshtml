@@ -1,0 +1,67 @@
+﻿@model OnMuhasebeUygulamasi.Models.LogOnModel
+
+@{
+    ViewBag.Title = "LogOn";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><b style="color:#08B0F9">Ön Muhasebe Uygulaması V1.0</b></h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <center><img src="~/Content/img/bilsoft.png" width="250" /></center>
+                        <center>
+                        <form role="form">
+                            <fieldset>
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @*@Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })*@
+                                   
+                                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Kullanıcı Adı", @style="width:200px;" } })
+                                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                   
+                                </div>
+
+                                <div class="form-group">
+                                    @*@Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })*@
+                                    <div>
+                                        @Html.PasswordFor(model => model.Password, new {  @class = "form-control", @placeholder = "Şifre", @style = "width:200px;" } )
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label col-md-5", @style="padding-left:53px;" })
+
+                                      
+                                          @Html.EditorFor(model => model.RememberMe,new { @style="padding-left:55px;" })
+                                          @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                                       
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                        <input style="margin-top:15px;width:200px;" type="submit" value="GİRİŞ" class="btn btn-lg btn-primary btn-block" />
+                                        <a style="width:200px;" type="button" value="KAYDOL" href="/Account/Register"  class="btn btn-lg btn-success btn-block">KAYDOL</a>
+                                </div>
+ 
+                            </fieldset>
+                        </form>
+                    </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+       
+

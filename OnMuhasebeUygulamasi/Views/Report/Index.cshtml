@@ -1,0 +1,293 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="alert-info" style="padding:5px;">Mevcut Durum</h2>
+            <div style="background-color:white;" id="report1_checkboxList">
+                <input style="margin-left:5px;" type="checkbox" id="activate1" checked="checked" /> Gelir
+                <input type="checkbox" id="activate2" checked="checked" /> Gider
+                <input type="checkbox" id="activate3" checked="checked" /> Kar-Zarar
+            </div>
+            <div style="background-color:white;" id="graph"></div>    
+
+                <a style="margin-top:5px;font-size:15px;" href="/Report/ExportToExcel/1" class="btn btn-success btn-sm">
+                    <span class="fa fa-file-text-o" style="font-size:15px"></span> Detaylı Rapor
+                </a>
+            
+            <hr />
+            
+
+            <div class="col-md-4">
+              <h2 class="alert-info" style="padding:5px;">Bu Ay En Çok Alınan Ürünler</h2>
+                <div id="report2"></div>
+                <a style="margin-top:5px;font-size:15px;" href="/Report/ExportToExcel/2" class="btn btn-success btn-sm">
+                    <span class="fa fa-file-text-o" style="font-size:15px"></span> Detaylı Rapor
+                </a>
+            </div>
+            <div class="col-md-7">
+                <h2 class="alert-info" style="padding:5px;">Gelecek Ay için Cari Kartlara Göre Gelir-Giderler</h2>
+                <div id="report3"></div>
+                <a style="margin-top:5px;font-size:15px;" href="/Report/ExportToExcel/3" class="btn btn-success btn-sm">
+                    <span class="fa fa-file-text-o" style="font-size:15px"></span> Detaylı Rapor
+                </a>
+            </div> 
+            <div class="clearfix"></div>
+            <hr />
+            <div class="col-md-4">
+                <h2 class="alert-info" style="padding:5px;">Bu Ay En Çok Gideri olan Cariler</h2>
+                <div id="report5"></div>
+                <a style="margin-top:5px;font-size:15px;" href="/Report/ExportToExcel/5" class="btn btn-success btn-sm">
+                    <span class="fa fa-file-text-o" style="font-size:15px"></span> Detaylı Rapor
+                </a>
+            </div> 
+            <div class="col-md-6">
+                <h2 class="alert-info" style="padding:5px;">Gelecek 3 ay En Çok Kazandıracak Ürünler</h2>
+                <div id="report4"></div>
+                <a style="margin-top:5px;font-size:15px;" href="/Report/ExportToExcel/4" class="btn btn-success btn-sm">
+                    <span class="fa fa-file-text-o" style="font-size:15px"></span> Detaylı Rapor
+                </a>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container-fluid -->
+@{ 
+    int verisayaci = 0;
+}
+
+@* REPORT 1 *@
+<script>
+    // Use Morris.Area instead of Morris.Line
+    function data(a, b, c) {
+
+        var ret = [
+             @foreach (var item in Model.Report1)
+             { verisayaci++;
+                 if (verisayaci <= Model.Report1.Count)
+                 {
+                    <text>
+                            { y: '@(item.Date.Year+"-"+item.Date.Month+"-"+item.Date.Day)', a: '@(item.TotalSumDebt)', b: '@(item.TotalSumCredit)', c: '@(item.TotalCostProfit)' },
+                     </text>
+                 }
+                 else
+                 {
+                      <text>
+                            { y: '@(item.Date.Value.Year + "-" + item.Value.Month + "-" + item.Value.Day)', a: '@(item.TotalSumDebt)', b: '@(item.TotalSumCredit)', c:  '@(item.TotalCostProfit)' }
+                     </text>
+                 }
+
+             }
+        ];
+
+        if (a == false) {
+
+            for (var i = 0; i < ret.length; i++)
+                delete ret[i].a;
+        }
+        if (b == false) {
+
+            for (var i = 0; i < ret.length; i++)
+                delete ret[i].b;
+        }
+        if (c == false) {
+
+            for (var i = 0; i < ret.length; i++)
+                delete ret[i].c;
+        }
+        return ret;
+    };
+
+    var morris = Morris.Line({
+        element: 'graph',
+        data: data(),
+        xkey: 'y',
+        ykeys: ['a', 'b', 'c'],
+        labels: ['Gelir', 'Gider', 'Kar-Zarar'],
+        colors: ["red", "blue", "green"]
+    });
+
+    jQuery(function ($) {
+        $('#activate1').on('change', function () {
+            var isChecked1 = $('#activate1').is(':checked');
+            var isChecked2 = $('#activate2').is(':checked');
+            var isChecked3 = $('#activate3').is(':checked');
+            morris.setData(data(isChecked1, isChecked2, isChecked3));
+
+        });
+        $('#activate2').on('change', function () {
+            var isChecked1 = $('#activate1').is(':checked');
+            var isChecked2 = $('#activate2').is(':checked');
+            var isChecked3 = $('#activate3').is(':checked');
+            morris.setData(data(isChecked1, isChecked2, isChecked3));
+        });
+        $('#activate3').on('change', function () {
+            var isChecked1 = $('#activate1').is(':checked');
+            var isChecked2 = $('#activate2').is(':checked');
+            var isChecked3 = $('#activate3').is(':checked');
+            morris.setData(data(isChecked1, isChecked2, isChecked3));
+        });
+    });
+</script>
+@*REPORT 1 SONU*@
+@*REPORT 2 BAŞI*@
+@{
+    int verisayaci2 = 0;
+}
+<script>
+    Morris.Donut({
+        element: 'report2',
+        data: [
+
+        @foreach (var item in Model.Report2)
+        {
+            verisayaci2++;
+            if (verisayaci2 <= Model.Report2.Count)
+            {
+                int IncomingAmount = item.IncomingAmount;
+                
+                    <text>
+                        { value: @(IncomingAmount), label: '@(item.StockName)' },
+                    </text>
+            }
+            else
+            {
+                    <text>
+                        { value: @(item.IncomingAmount), label: '@(item.StockName)' }
+                    </text>
+            }
+        }
+        ],
+        formatter: function (x) { return x + "" },
+    }).on('click', function (i, row) {
+        console.log(i, row);
+    });
+</script>
+@*REPORT 2 SONU*@
+@*REPORT 3*@
+<script>
+    @{
+        int verisayaci3 = 0;
+    }
+    // Use Morris.Bar
+    Morris.Bar({
+        element: 'report3',
+        data: [
+            @foreach(var item in Model.Report3)
+            {
+                
+                int TotalDebt = Convert.ToInt32(item.TotalDebt);
+                int TotalCredit = Convert.ToInt32(item.TotalCredit);
+
+                verisayaci3++;
+                if (verisayaci3 <= Model.Report3.Count)
+                {
+                    <text>
+                      {x: '@(item.CurrentName)', y: @(TotalDebt), z: @(TotalCredit)},
+                   </text>
+                }
+                else
+                {
+                    <text>
+                        {x: '@(item.CurrentName)', y: @(TotalDebt), z: @(TotalCredit)}
+                    </text>
+                }
+             }
+
+
+        ],
+        xkey: 'x',
+        ykeys: ['y', 'z'],
+        labels: ['Gelir', 'Gider'],
+        barColors: ['green','rgb(160, 0, 0)',]
+    }).on('click', function(i, row){
+        console.log(i, row);
+    });
+</script>
+@*REPORT 3 SONU*@
+@{
+    int verisayaci4 = 0;
+}
+@* REPORT 4 BAŞI *@
+<script>
+    Morris.Bar({
+        element: 'report4',
+        data: [
+
+            @foreach(var item in Model.Report4)
+            {
+
+                int TotalAmount = Convert.ToInt32(item.TotalAmount);
+                int Yield = Convert.ToInt32(item.Yield);
+
+                verisayaci4++;
+                if (verisayaci4 <= Model.Report4.Count)
+                {
+                   
+                        
+                        <text>
+                            {x: '@(item.Month.Year + "-" + item.Month.Month+" "+item.StockName)', y:@(Yield) , z:@(TotalAmount)},
+                        </text>
+                    }
+                else
+                {
+                        <text>
+                            {x: '@(item.Month.Year + "-" + item.Month.Month+" "+item.StockName)', y:@(Yield) , z:@(TotalAmount)}
+                        </text>
+                    }
+            }
+        ],
+        xkey: 'x',
+        ykeys: ['y', 'z'],
+        labels: ['Satış Miktarı', 'Toplam Kazanç'],
+        barColors: ['rgb(11, 98, 164)','#4da74d',]
+    }).on('click', function(i, row){
+        console.log(i, row);
+    });
+</script>
+@* REPORT 4 SONU *@
+@*REPORT 5 BAŞI*@
+@{
+    int verisayaci5 = 0;
+}
+<script>
+    Morris.Donut({
+        element: 'report5',
+        data: [
+
+        @foreach (var item in Model.Report5)
+        {
+            int Credit = Convert.ToInt32(item.Credit);
+            verisayaci5++;
+            if (verisayaci5 <= Model.Report5.Count)
+            {
+
+
+                    <text>
+                        { value: @(Credit), label: '@(item.CurrentName)' },
+                    </text>
+            }
+            else
+            {
+                    <text>
+                        { value: @(Credit), label: '@(item.CurrentName)' }
+                    </text>
+            }
+        }
+        ],
+        formatter: function (x) { return x + "₺" },
+    }).on('click', function (i, row) {
+        console.log(i, row);
+    });
+</script>
+@*REPORT 5 SONU*@

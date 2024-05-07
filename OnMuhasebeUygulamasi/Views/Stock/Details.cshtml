@@ -1,0 +1,173 @@
+﻿@model OnMuhasebeUygulamasi.Models.Stock
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h4>@Html.DisplayFor(model => model.StockName)</h4>
+            <hr />
+            <dl class="alert alert-info">
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockBarcode)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockBarcode)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockComment)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockComment)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockKDV)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockKDV)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockMainUnitType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockMainUnitType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockSecondUnitType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockSecondUnitType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockThirdUnitType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockThirdUnitType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockMainUnit)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockMainUnit)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockSecondUnit)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockSecondUnit)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockThirdUnit)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockThirdUnit)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockKDVSalesStatus)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockKDVSalesStatus)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockKDVBuyingStatus)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockKDVBuyingStatus)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockMainUnitSalesPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockMainUnitSalesPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockSecondUnitSalesPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockSecondUnitSalesPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockThirdUnitSalesPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockThirdUnitSalesPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockMainUnitBuyingPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockMainUnitBuyingPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockSecondUnitBuyingPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockSecondUnitBuyingPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StockThirdUnitBuyingPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StockThirdUnitBuyingPrice)
+                </dd>
+
+            </dl>
+        <p>
+            <a type="button" href="/Stock/Index" class="btn btn-default">Geri Dön</a>
+        </p>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model OnMuhasebeUygulamasi.Models.CurrentCard
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+
+            <h4 style="font-size:20px;" class="alert alert-danger">Silmek istediğinize emin misiniz ?</h4>
+            <hr />
+            <dl class="alert alert-info">
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrentType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrentType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrentName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrentName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BalanceDebt)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BalanceDebt)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BalanceCredit)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BalanceCredit)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Currency)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Currency)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrentCardDetail.FirstInformation)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrentCardDetail.FirstInformation)
+                </dd>
+            
+              </dl>
+
+                @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                          
+                            <a type="button" href="/CurrentCards/Index" class="btn btn-default">Geri Dön</a>
+                            <input type="submit" value="Sil" class="btn btn-danger" /> |
+                        </div>
+                    }
+        </div>
+    </div>
+</div>

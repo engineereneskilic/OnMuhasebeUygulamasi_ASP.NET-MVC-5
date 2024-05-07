@@ -1,0 +1,116 @@
+﻿@model OnMuhasebeUygulamasi.Models.CurrentCardDetail
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h4>@Html.DisplayFor(model => model.CurrentCard.CurrentName)</h4>
+            <hr />
+            <dl class="alert alert-info">
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstInformation)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FirstInformation)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.SecondInformation)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SecondInformation)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstPhone)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FirstPhone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.SecondPhone)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SecondPhone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.FaxNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FaxNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.GsmNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.GsmNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Province)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Province)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.District)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.District)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Notes)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Notes)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrentCard.CurrentType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrentCard.CurrentType)
+                </dd>
+
+            </dl>
+            <p>
+                <a type="button" href="/CurrentCards/Index" class="btn btn-default">Geri Dön</a>
+            </p>
+        </div>
+        
+    </div>
+</div>

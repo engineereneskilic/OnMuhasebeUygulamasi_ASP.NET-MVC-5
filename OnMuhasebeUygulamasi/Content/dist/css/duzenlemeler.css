@@ -1,0 +1,32 @@
+﻿input { 
+        margin-bottom:5px;
+    }
+.SayfaBaslikResimleri{
+    margin-bottom:10px;
+}
+h4{
+    font-size: 30px;
+    color:white;
+    background-color:#66c2ff;
+    padding:5px;
+    border-radius:5px;
+}
+.secili table{
+        background-color:white;
+    }
+
+table tbody tr:hover, .table-striped>tbody>tr:nth-of-type(odd):hover{
+       background-color:wheat;
+       cursor:pointer;
+ }
+.rowSecili{
+       background-color:wheat !important;
+       cursor:pointer;
+ }
+table{
+        
+        border-radius:5px !important;
+}
+.SilModels .modal-content{
+    border: 1px solid red !important;
+}

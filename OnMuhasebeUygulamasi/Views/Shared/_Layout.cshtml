@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Ön Muhasebe Uygulaması - Demo</title>
+    <link rel="icon" href="~/Content/img/bilsoft-icon.ico">
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- MetisMenu CSS -->
+    <link href="~/Content/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/Content/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="~/Content/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="~/Content/dist/css/duzenlemeler.css" rel="stylesheet">
+    <script src="~/Content/js/MyJs.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    @* GRAPHİCS JS *@
+
+    @if (Request.Url.ToString().IndexOf("Report") != -1)
+    {
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+    <script src="~/Content/graphics/js/morris.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.min.js"></script>
+    <script src="~/Content/graphics/js/example.js"></script>
+    @*<link rel="stylesheet" href="~/Content/graphics/css/example.css">*@
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.min.css">
+    <link rel="stylesheet" href="~/Content/graphics/css/morris.css">
+    }
+    @* GRAPHİCS JS SONU *@
+
+
+
+   @*@if (User.Identity.Name == "" && Request.Url.Segments.Last() != "LogOn" && Request.Url.Segments.Last() != "Register") // Oturum açık değil ve LogOn ve Create Sayfasında değilse
+    {
+    <script>window.location ="/Account/LogOn"</script> // LogOn Sayfasına yönlendir
+    }*@
+   <script>
+       var kere=0;
+       function sayfayaTiklandi() {
+           kere++;
+           // popuplar kapanırken urlerler eski haline dönsün
+           if (document.getElementsByClassName("modal-open").length.toString() == "1") {
+              if(kere > 2) Link('aktif'); // kere => ikinci kere model-open classı geldiğinde eski url dönsün
+           }
+       }
+
+   </script>
+</head>
+<body onclick="sayfayaTiklandi()">
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header"> 
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Ön Muhasebe Uygulaması V1.0</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+
+                @if (User.Identity.IsAuthenticated) // kullanıcı ismi cookide yoksa kullanıcı yoktor o zaman kullanıcı menüsü de yoktur
+                {
+                    //     @Request.Cookies["active_role"].Value
+                <li class="dropdown">
+                    
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        @User.Identity.Name
+                        @*@Request.Cookies["active_role"].Value*@
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        @if(ViewBag.Role == "1" && User.Identity.IsAuthenticated) {
+                        <li>
+                            <a href="/Account/UserDetails"><i class="fa fa-user fa-fw"></i> Users</a>
+                        </li>
+                        }
+                        <li>
+                            <a href="/Account/ChangePassword"><i class="fa fa-gear fa-fw"></i> Options</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/Account/LogOut"><i class="fa fa-sign-out fa-fw"></i> LogOut</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                }
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search" style="background-color:#f2f2f2">
+                            @*<div class="input-group custom-search-form">*@
+
+                                <a href="/Home/Index"><img src="~/Content/img/bilsoft-icon.ico" style="margin-left:-20px"></a> 
+                            @*</div>*@
+                            <!-- /input-group -->
+                        </li>
+                        @{ 
+                            string aktif_eleman="";
+                            string aktif_url = "";
+                            string aktif_admin_url = "";
+
+                        }
+                       @if (!User.Identity.IsAuthenticated) { aktif_eleman = "disabled"; } else { aktif_eleman = ""; }
+                       @if (ViewBag.Role == "1" && User.Identity.IsAuthenticated) { aktif_admin_url = ""; } else { aktif_admin_url = "disabled"; } 
+
+                        @if (Request.Url.ToString().IndexOf("CurrentCards") != -1) { aktif_url = "active"; }
+                        <li>
+                            <a style="background-color:#d9edf7;color:#31708f;font-weight:bold;"><center>İŞLEMLER</center></a>
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="/CurrentCards/Index/1"><img src="~/Content/img/CariKartlar.png" width="32">  Cari Kartlar</a>
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="/Stock/Index"><img src="~/Content/img/Stoklarr.png" width="32">  Stoklar</a>
+                        </li>
+                         @if (Request.Url.ToString().IndexOf("Bill") != -1) {  aktif_url = "active"; }
+                        <li class="@aktif_eleman">
+                            <a href="/Bill/Index" class="@(aktif_url)"><img src="~/Content/img/Faturalar.png" width="32">  Faturalar</a>
+                            
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="#"><img src="~/Content/img/Dekontlarrr.png" width="32">  Dekontlar</a>
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="#"><img src="~/Content/img/CekSenetler.jpg" width="32">  Çek-Senetler</a>
+                        </li>
+
+                        <li class="@(aktif_eleman) @(aktif_admin_url)">
+                            <a href="#"><img src="~/Content/img/Kasalarrr.png" width="32">  Kasalar</a>
+                        </li>
+                        <li class="@(aktif_eleman) @(aktif_admin_url)">
+                            <a href="#"><img src="~/Content/img/Bankalar.png" width="32">  Bankalar</a>
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="#"><img src="~/Content/img/AdresDefterim.png" width="32">  Adres Defterim</a>
+                        </li>
+                        <li class="@aktif_eleman">
+                            <a href="#"><img src="~/Content/img/Gorevler.png" width="32">  Görevler</a>
+                        </li>
+                        @if (Request.Url.ToString().IndexOf("Report") != -1) { aktif_url = "active"; }
+                        <li class="@(aktif_eleman) @(aktif_admin_url)">
+                            <a href="/Report/Index" class="@(aktif_url)"><img src="~/Content/img/rapor.png" width="32">  Raporlar</a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <!-- jQuery -->
+    <script src="~/Content/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Content/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="~/Content/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Content/dist/js/sb-admin-2.js"></script>
+</body>
+</html>

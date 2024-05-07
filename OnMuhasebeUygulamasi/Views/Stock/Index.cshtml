@@ -1,0 +1,137 @@
+﻿@model OnMuhasebeUygulamasi.MultipleModelView.StockwithStockDetails
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div style="margin-top:20px;" class="row">
+
+        <div class="col-lg-12">
+            <div class="col-md-8 col-md-offset-2"><h2 class="alert-info" style="padding:5px;">Stoklar</h2></div> <div class="clearfix"></div>
+            <div class="panel-body col-md-8 col-md-offset-2">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Stok Türü</th>
+                                <th>Stok Kodu</th>
+                                <th>Stok Adı</th>
+                                <th>Mevcut</th>
+                                <th>Birim Fiyatı</th>
+                                <th>I.Br. Satış Fiyatı</th>
+                                <th>II.Br. Satış Fiyatı</th>
+                                <th>Envanter Ederi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                string aktif_row = "";
+
+
+                            }
+                            @foreach (var item in Model.StockList)
+                            {
+                                if (Request.Url.Segments.Last() == @item.StockCode.ToString()) { aktif_row = "rowSecili"; } else { aktif_row = ""; }
+
+                                <tr onclick="document.location = '/Stock/Index/'+@item.StockCode+'';" class="@aktif_row">
+                                    <td>@item.StockType</td>
+                                    <td>@item.StockCode</td>
+                                    <td>@item.StockName</td>
+                                    <td>@item.StockMainUnit</td>
+                                    <td>@string.Format("{0:C}", item.StockMainUnitSalesPrice)</td>
+                                    <td>@string.Format("{0:C}", item.StockSecondUnitSalesPrice)</td>
+                                    <td>@string.Format("{0:C}", item.StockThirdUnitSalesPrice)</td>
+                                    <td>@string.Format("{0:C}",(item.StockMainUnit * item.StockMainUnitSalesPrice))</td>
+                                    <td width="350px">
+
+                                        @Html.ActionLink("Düzenle", "Edit", new { id = item.StockCode }, new { @class = "btn btn-success" }) |
+                                        @Html.ActionLink("Detaylar", "Details", new { id = item.StockCode }, new { @class = "btn btn-info" }) |
+                                        @Html.ActionLink("Sil", "Delete", new { id = item.StockCode}, new { @class = "btn btn-danger", @style = "margin-top:5px;" })
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+                @Html.ActionLink("+ Yeni Ekle", "Create", null, new { @class = "btn btn-primary" }) | <button onclick="document.location = '/Stock/Index'" class="btn btn-default" href="">Yenile</button>
+                @* GRAFİK *@
+               
+
+            </div>
+            @* Hareketler *@
+            <div class="col-md-7 col-md-offset-3"><h2 class="alert-info" style="padding:5px;">Stok Hareketleri</h2></div> <div class="clearfix"></div>
+            <div class="panel-body col-md-7 col-md-offset-3">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>İşlem No</th>
+                                <th>İşlem Tarihi</th>
+                                <th>İşlem Tipi</th>
+                                <th>Cari Kodu</th>
+                                <th>Cari Adı</th>
+                                <th>+ GİREN</th>
+                                <th>- ÇIKAN</th>
+                                <th>Birim Fiyatı</th>
+                                <th>Toplam Tutar</th>
+                                <th>İndirim</th>
+                                
+                            </tr>
+                        </thead>
+                        @{
+                            string ActionName = "";
+                            string ActionSequanceCode = "";
+                        }
+                @if (Model.StockMovementList != null)
+                {
+                        <tbody>
+                            @foreach (var item in Model.StockMovementList)
+                            {
+                                if (item.ProcessType.IndexOf("Fatura") != -1) { ActionName = "Bill"; ActionSequanceCode = Convert.ToString(item.SequanceNo); }
+                                else
+                                    if (item.ProcessType.IndexOf("Havale") != -1) { ActionName = "Bank"; ActionSequanceCode = Convert.ToString(item.SequanceNo); }
+
+                                <tr onclick="document.location = '/@ActionName/Index/@ActionSequanceCode';">
+                                    <td>@item.SequanceNo</td>
+                                    <td> @{ DateTime tarih = Convert.ToDateTime(item.ProcessDate);
+                                          }
+                                    @tarih.ToShortDateString();
+                                    </td>
+                                    <td>@item.ProcessType</td>
+                                    <td>@item.CurrentCode</td>
+                                    <td>@item.CurrentName</td>
+                                    <td>@item.IncomingAmount</td>
+                                    <td>@item.Yield</td>
+                                    <td>@string.Format("{0:C}",item.UnitPrice)</td>
+                                    <td>@string.Format("{0:C}", item.TotalAmount) </td>
+                                    <td>@string.Format("{0:C}",item.Discount)</td>
+                                    <td @*width="400px"*@>
+                                        <a href="/@ActionName/Index/@ActionSequanceCode" class="btn btn-info">Detaylar</a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                }
+                    </table>
+                    @if (Model.StockMovementList == null)
+                    {
+                        <h5 class="alert alert-warning" style="text-align:center;font-size:24px;">Lütfen Stoktan Bir Ürün Seçiniz...</h5>
+                    }
+                </div>
+                <!-- /.table-responsive -->
+               @Html.ActionLink("+ Yeni Ekle", "Create", null, new { @class = "btn btn-primary" }) | <button onclick="document.location = '/Stock/Index/@Request.Url.Segments.Last()'" class="btn btn-default" href="">Yenile</button>
+                @* GRAFİK *@
+
+
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+

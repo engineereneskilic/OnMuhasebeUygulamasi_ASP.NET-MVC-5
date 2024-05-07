@@ -1,0 +1,899 @@
+﻿@model OnMuhasebeUygulamasi.MultipleModelView.BillBigModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    int _page = 1;
+    int _pageSize = 10;
+}
+@if (Request.QueryString["page"] != null)
+{
+    _page = Convert.ToInt32(Request.QueryString["page"]);
+    _pageSize = Convert.ToInt32(Request.QueryString["pageSize"]);
+}
+<style type="text/css">
+    .yeni_fatura_elemani:hover{
+        background-color:#dff0d8;
+    }
+    .input_edit_Bill{
+        visibility:hidden;
+        display:none;
+    }
+    .view_Bill{
+        visibility:visible;
+        display:table-cell;
+    }
+</style>
+@{
+
+    DateTime now = DateTime.Now;
+    TimeSpan nowtimeFormat = new TimeSpan(now.Hour, now.Minute, now.Second);
+
+    List<SelectListItem> aylar = new List<SelectListItem>
+         {
+           new SelectListItem { Text = "Ocak", Value = "Ocak" },
+           new SelectListItem { Text = "Şubat", Value = "Şubat" },
+           new SelectListItem { Text = "Mart", Value = "Mart" },
+           new SelectListItem { Text = "Nisan", Value = "Nisan" },
+           new SelectListItem { Text = "Mayıs", Value = "Mayıs" },
+           new SelectListItem { Text = "Haziran", Value = "Haziran" },
+           new SelectListItem { Text = "Temmuz", Value = "Temmuz" },
+           new SelectListItem { Text = "Ağustos", Value = "Ağustos" },
+           new SelectListItem { Text = "Eylül", Value = "Eylül" },
+           new SelectListItem { Text = "Ekim", Value = "Ekim" },
+           new SelectListItem { Text = "Kasım", Value = "Kasım" },
+           new SelectListItem { Text = "Aralık", Value = "Aralık" }
+         };
+
+}
+@{
+    string aktif_row = "";
+    int satir_no = 0;
+
+}
+<script>
+    var tr_aktifLink = "onclick";
+</script>
+<div class="container-fluid">
+    <div style="margin-top:20px;" class="row">
+
+        <div class="col-lg-12">
+            <div class="col-md-10 col-md-offset-1"><h2 class="alert-info" style="padding:5px;">Faturalar</h2></div> <div class="clearfix"></div>
+            <div class="panel-body col-md-10 col-md-offset-1">
+                <div class="well well-sm"> Showing @Model.BillListPL.FirstItemOnPage to @Model.BillListPL.LastItemOnPage of @Model.BillListPL.TotalItemCount Bill </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>İşlem Tarihi</th>
+                                <th>İşlem Tipi</th>
+                                <th>Fatura No</th>
+                                <th>Cari Adı</th>
+                                <th>Net Borç</th>
+                                <th>Net Alacak</th>
+                                <th>Para Birimi</th>
+                                <th>-İndirim</th>
+                                <th>+KDV</th>
+                                <th>Dönem</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.BillListPL)
+                            {
+                                using (Html.BeginForm("Edit", "Bill", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken();
+
+                                    if (Request.Url.Segments.Last() == @item.BillCode.ToString()) { aktif_row = "rowSecili"; } else { aktif_row = ""; }
+
+
+                                    satir_no = satir_no + 1;
+
+
+
+                                    <tr id="tr@(satir_no)" onclick="LinkAktifPasif('@(satir_no)','@(item.BillCode)',tr_aktifLink)" class="@aktif_row">
+
+                                        <td>
+                                            <div class="view_Bill vb@(satir_no)">
+                                                @item.ProcessDate.Value.Date.ToShortDateString() @item.ProcessTime
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @now.Date.ToShortDateString() @nowtimeFormat
+                                            </div>
+                                        </td>
+
+                                        @{
+                                            IEnumerable<SelectListItem> ProcessType = new List<SelectListItem>()
+                                                        {
+                                                            new SelectListItem { Text = "Alış Faturası", Value = "Alış Faturası" },
+                                                            new SelectListItem { Text = "Satış Faturası", Value = "Satış Faturası" },
+                                                        };
+                                        }
+                                        <td style="width:250px">
+                                            <div class="view_Bill vb@(satir_no)">
+                                                @item.ProcessType
+
+                                                @*@{
+
+                                                        Model.SelectedBilll.ProcessType = item.ProcessType;
+                                                    }*@
+                                                @{
+
+
+                                                }
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.DropDownListFor(model => model.SelectedBilll.ProcessType, ProcessType, ProcessType.Where(selected => selected.Text == item.ProcessType).FirstOrDefault().Text, new { @class = "form-control", @id = "old_ProcessType_DropDownList", @Value = item.ProcessType.ToString() })
+                                                @Html.ValidationMessageFor(model => model.SelectedBilll.ProcessType, "", new { @class = "text-danger" })
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* sabit *@
+                                            @item.BillCode
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(m => m.SelectedBilll.BillCode)
+                                            </div>
+                                        </td>
+
+                                        <td style="width:390px;">
+                                            <div class="view_Bill vb@(satir_no)">
+                                                @item.CurrentName
+                                                @*@{
+                                                        Model.SelectedBilll.CurrentName = @item.CurrentName;
+
+                                                    }*@
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.DropDownListFor(model => model.SelectedBilll.CurrentName, Model.CurrentCardList.Select(c_item => new SelectListItem { Text = c_item.CurrentName, Value = c_item.CurrentName }), new { @class = "form-control", @id = "CurrentName_DropDownList", @Value=item.CurrentName })
+                                                @Html.ValidationMessageFor(model => model.SelectedBilll.CurrentName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            @* sabit *@
+                                            @string.Format("{0:C}", item.NetDebt)
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(model => model.SelectedBilll.NetDebt)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* sabit*@
+                                            @string.Format("{0:C}", item.NetCredit)
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(model => model.SelectedBilll.NetCredit)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* sabit *@
+                                            @item.Currency
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(model => model.SelectedBilll.Currency)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* sabit *@
+                                            @string.Format("{0:C}", item.Discount)
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(model => model.SelectedBilll.Discount)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* sabit *@
+                                            @string.Format("{0:C}", item.Kdv)
+                                            <div class="view_Bill vb@(satir_no)">
+
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.HiddenFor(model => model.SelectedBilll.Kdv)
+                                            </div>
+                                        </td>
+
+                                        <td style="width:250px;">
+
+
+                                            <div class="view_Bill vb@(satir_no)">
+                                                @item.Term
+                                            </div>
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                @Html.DropDownListFor(model => model.SelectedBilll.Term, aylar, aylar[now.Month - 1].Text, new { @class = "form-control", @id = "old_Term_DropDownList" })
+                                            </div>
+                                        </td>
+                                        <td width="400px">
+                                            <div class="input_edit_Bill ie@(satir_no)">
+                                                <input id="old_billdetailguncelle_button" style="float:initial" type="submit" value="Güncelle" class="btn btn-warning center" /> |
+                                                <button type="button" class="btn btn-danger" onclick="GoruntulemeModu('@(satir_no)');Link('aktif')">İptal</button>
+                                            </div>
+                                            <div class="view_Bill vb@(satir_no)">
+                                                <button type="button" id="bill_duzenle_button bdb@(item.BillCode)" name="bill_duzenle_button" class="btn btn-success" onclick="DuzenlemeModu('@(satir_no)');Link('pasif');">Düzenle</button>
+                                                <button type="button" id="bill_sil_button_bdb@(item.BillCode)" name="bill_sil_button" class="btn btn-danger" onclick="Link('pasif')" data-toggle="modal" data-target="#SilModel@(item.BillCode)">Sil</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                                        }
+                                                    }
+
+
+                            @* YENİ FATURA KAYDI *@
+
+                            @using (Html.BeginForm("Create", "Bill", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <tr id="yeni_fatura_elemani" class="alert alert-success" style="background-color: #dff0d8 !important;border-width:2px;display:none;">
+
+                                    <td style="width:125px;">@now.Date.ToShortDateString() @nowtimeFormat</td>
+
+                                    @{
+                                        IEnumerable<SelectListItem> ProcessType = new List<SelectListItem>()
+                                                        {
+                                                            new SelectListItem { Text = "Alış Faturası", Value = "Alış Faturası" },
+                                                            new SelectListItem { Text = "Satış Faturası", Value = "Satış Faturası" },
+                                                        };
+                                    }
+
+
+                                    <td style="width:190px;">
+                                        @Html.DropDownListFor(model => model.newBill.ProcessType, ProcessType, new { @class = "form-control", @id = "ProcessType_DropDownList" })
+                                        @Html.ValidationMessageFor(model => model.newBill.ProcessType, "", new { @class = "text-danger" })
+                                    </td>
+                                    <td>@Html.EditorFor(m => m.newBill.BillCode, new { htmlAttributes = new { @class = "form-control", @style = "visibility:hidden;display:none;" } })</td>
+
+                                    @if (Model.CurrentCardList != null)
+                                    {
+                                        <td style="width:390px;">
+                                            @Html.DropDownListFor(model => model.newBill.CurrentName, Model.CurrentCardList.Select(item => new SelectListItem { Text = item.CurrentName, Value = item.CurrentName }), new { @class = "form-control", @id = "CurrentName_DropDownList" })
+                                            @Html.ValidationMessageFor(model => model.newBill.CurrentName, "", new { @class = "text-danger" })
+                                        </td>
+                                    }
+
+                                    <td>@Html.HiddenFor(model => model.newBill.NetDebt)</td>
+                                    <td>@Html.HiddenFor(model => model.newBill.NetCredit)</td>
+                                    <td>@Html.HiddenFor(model => model.newBill.Currency)</td>
+                                    <td>@Html.HiddenFor(model => model.newBill.Discount)</td>
+                                    <td>@Html.HiddenFor(model => model.newBill.Expense)</td>
+                                    <td style="width:250px;">
+
+                                        @Html.DropDownListFor(model => model.newBill.Term, aylar, aylar[now.Month - 1].Text, new { @class = "form-control", @id = "Term_DropDownList" })
+
+                                    </td>
+                                    <td>
+                                        <input style="float:initial" type="submit" value="Kaydet" class="btn btn-primary center" /> |
+                                        <button type="button" id="yeni_kayit_iptal_button" onclick="document.getElementById('yenieleman_button').disabled=false;document.getElementById('yeni_fatura_elemani').style='display:none;background-color: #dff0d8 !important;border-width:2px;'" class="btn btn-danger">İptal</button>
+                                    </td>
+                                </tr>
+                                        }
+                            @* YENİ FATURA KAYDI SONU *@
+                        </tbody>
+                    </table>
+                    <div>@Html.PagedListPager(Model.BillListPL, page => Url.Action("Index", new { page, pageSize = Model.BillListPL.PageSize }))</div>
+
+                    <!-- /.table-responsive -->
+                    <button id="yenieleman_button" onclick="document.getElementById('yeni_fatura_elemani').style='display:table-row;background-color: #dff0d8 !important;border-width:2px;';document.getElementById('yenieleman_button').disabled=true;" class="btn btn-primary">+ Yeni Ekle</button> | <button onclick="document.location = '/Bill/Index'" class="btn btn-default" href="">Yenile</button>
+                </div>
+
+
+                <div class="col-md-9 col-md-offset-1"><h2 class="alert-info" style="padding:5px;">Fatura Detayı</h2></div> <div class="clearfix"></div>
+                <div class="panel-body col-md-9 col-md-offset-1">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Satır Türü</th>
+                                    <th>Stok Kodu</th>
+                                    <th>Stok Açıklama</th>
+                                    <th>Birimi</th>
+                                    <th>+Giren Miktar</th>
+                                    <th>-Çıkan Miktar</th>
+                                    <th>Birim Fiyat</th>
+                                    <th>+KDV</th>
+                                    <th>-İndirim</th>
+                                    <th>Toplam Tutar</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            @{
+                                int girencikan = 0;
+                            }
+                            @if (Model.BillDetailList != null)
+                            {
+                                <tbody>
+                                    @foreach (var item in Model.BillDetailList)
+                                    {
+
+
+                                        if (Request.QueryString["bd"] == @item.BillDetailID.ToString()) { aktif_row = "rowSecili"; } else { aktif_row = ""; }
+
+                                        <tr onclick="document.location = '/Bill/Index/'+@Request.Url.Segments.Last()+'?bd='+@item.BillDetailID+'';">
+                                            <td>@item.LineType</td>
+                                            <td>@item.StockCode</td>
+                                            <td>@item.Discript</td>
+                                            <td>@item.UnitType</td>
+
+                                            <td> @item.IncomingAmount @if (item.IncomingAmount != null) { girencikan = Convert.ToInt32(item.IncomingAmount); } </td>
+                                            <td>@item.Yield @if (item.Yield != null) { girencikan = Convert.ToInt32(item.Yield); }</td>
+
+
+                                            <td>@string.Format("{0:C}", item.UnitPrice)</td>
+                                            <td id="kdv_td">@string.Format("{0:C}", (((girencikan * item.UnitPrice) * (1 + (item.KdvPercent / 100))) - (girencikan * item.UnitPrice)))</td>
+                                            <td id="indirim_td">@string.Format("{0:C}", (girencikan * item.UnitPrice) * (item.DiscountPercent / 100))</td>
+                                            <td id="toplamtutar_td">@string.Format("{0:C}", ((girencikan * item.UnitPrice) + (((girencikan * item.UnitPrice) * (1 + (item.KdvPercent / 100))) - (girencikan * item.UnitPrice))) - (girencikan * item.UnitPrice) * (item.DiscountPercent / 100)) </td>
+                                            <td width="400px">
+
+                                               <a style="float:left;" class="btn btn-success" href="/Bill/Index/@Request.Url.Segments.Last()?bd=@item.BillDetailID&page=@_page&pageSize=@_pageSize">Düzenle</a><div style="float:left;"> &nbsp;|&nbsp; </div>
+                                                @using (Html.BeginForm("DeleteBd", "Bill", new { id = item.BillDetailID }, FormMethod.Post, new { @style = "float:left;" }))
+                                                {@Html.AntiForgeryToken()
+                                                    <input type="submit" class="btn btn-danger" value="Sil">
+                                                }
+                                                
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+
+                            }
+                        </table>
+                        @if (Model.BillDetailList == null)
+                        {
+                            <h5 class="alert alert-warning" style="text-align:center;font-size:24px;">Lütfen Bir Fatura Seçiniz...</h5>
+                        }
+                    </div>
+                  
+                    <!-- /.table-responsive -->
+                    <button id="newBillDeteailButton" onclick="document.location = '/Bill/Index/@Request.Url.Segments.Last()?newbd=true&page=@_page&pageSize=@_pageSize'" class="btn btn-primary" href="">+ Yeni Ekle</button> | <button id="newBillDeteailYenileButton" onclick="SubmitChange('true');document.location = '/Bill/Index/@Request.Url.Segments.Last()'" class="btn btn-default" href="">Yenile</button>
+                    @if (Model.BillDetailList == null)
+                    {
+                        <script>
+                            document.getElementById('newBillDeteailButton').disabled=true;
+                            document.getElementById('newBillDeteailYenileButton').disabled=true;
+                        </script>
+                    }
+                    else
+                    {
+                        <script>
+                            document.getElementById('newBillDeteailButton').disabled=false;
+                            document.getElementById('newBillDeteailYenileButton').disabled=false;
+                        </script>
+                    }
+                    @{
+                        string actionName = "";
+                        string SubmitButtonClass = "";
+                        string SubmitButtonValue = "";
+                    }
+
+                    <button type="button" hidden id="EditPopup" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="getbootstrap">Open modal for getbootstrap</button>
+                    @if (Request.QueryString["bd"] != null || Request.QueryString["newbd"] == "true")
+                    {
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" onclick="bos()">
+                            <div class="modal-dialog" role="document" style="width: 600px !important;margin: 30px auto !important;">
+                                <div class="modal-content" style="background-color:#d9edf7;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title col-md-7 well well-sm" id="exampleModalLabel" style="font-weight:bold;font-size:larger;color:#31708f">@(Model.SelectedStock.StockName)</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body col-md-7 col-md-offset-2">
+                                      
+                                        @{
+                                            if (Request.QueryString["newbd"] == "true") { actionName = "Create";SubmitButtonClass = "btn-primary";SubmitButtonValue = "Kaydet"; } else { actionName = "Edit";SubmitButtonClass = "btn-success";SubmitButtonValue = "Güncelle"; }
+                                        }
+
+                                        @using (Html.BeginForm(actionName, "bill", FormMethod.Post))
+                                        {
+                                            @LineTotalAmount();
+                                            @helper LineTotalAmount()
+                                            {
+if (Model.SelectedBilDetail != null)
+{
+    int girencikan = 0;
+    if (Model.SelectedBilDetail.IncomingAmount != null) { girencikan = Convert.ToInt32(Model.SelectedBilDetail.IncomingAmount); }
+    if (Model.SelectedBilDetail.Yield != null) { girencikan = Convert.ToInt32(Model.SelectedBilDetail.Yield); }
+
+    Model.SelectedBilDetail.LineTotalAmount = ((girencikan * Model.SelectedBilDetail.UnitPrice) + (((girencikan * Model.SelectedBilDetail.UnitPrice) * (1 + (Model.SelectedBilDetail.KdvPercent / 100))) - (girencikan * Model.SelectedBilDetail.UnitPrice))) - (girencikan * Model.SelectedBilDetail.UnitPrice) * (Model.SelectedBilDetail.DiscountPercent / 100);
+}
+}
+                                            <script>
+                                                function LineTotalAmount() {
+                                                    var girencikan = 0;
+                                                    if (document.getElementById("IncomingAmount_textbox").value != "") girencikan = document.getElementById("IncomingAmount_textbox").value;
+                                                    if (document.getElementById("Yield_textbox").value != "") girencikan = document.getElementById("Yield_textbox").value;
+
+
+
+                                                    document.getElementById("LineTotalAmount_textbox").value = String(parseFloat(parseFloat(girencikan) * parseFloat(document.getElementById("UnitPrice_textbox").value) + (((parseFloat(girencikan) * parseFloat(document.getElementById("UnitPrice_textbox").value) * (1 + (parseFloat(document.getElementById("KdvPercent_textbox").value) / 100))) - (parseFloat(girencikan) * parseFloat(document.getElementById("UnitPrice_textbox").value)))) - (parseFloat(girencikan) * parseFloat(document.getElementById("UnitPrice_textbox").value)) * (document.getElementById("DiscountPercent_textbox").value / 100)).toFixed(2));
+                                                    document.getElementById("LineTotalAmount_textbox").value = String(document.getElementById("LineTotalAmount_textbox").value).replace(".", ",");
+
+                                                }
+                                                function UnitPriceUpdate() {
+
+                                                    if('@(string.IsNullOrEmpty(Model.SelectedBilll.ProcessType))'){
+                                                        if('@(Model.SelectedBilll.ProcessType)' == "Alış Faturası"){
+
+
+
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockMainUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockMainUnitBuyingPrice);}
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockSecondUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockSecondUnitBuyingPrice);}
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockThirdUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockThirdUnitBuyingPrice);}
+
+
+                                                        }else{ // Satış Faturasıdır
+
+
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockMainUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockMainUnitSalesPrice);}
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockSecondUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockSecondUnitSalesPrice);}
+                                                            if(document.getElementById("UnitType_DropDownList").value == '@(Model.SelectedStock.StockThirdUnitType)')  {document.getElementById("UnitPrice_textbox").value = @(Model.SelectedStock.StockThirdUnitSalesPrice);}
+
+                                                        }
+
+                                                        LineTotalAmount();
+                                                    }
+
+
+
+                                                }
+                                            </script>
+
+
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="form-horizontal">
+
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                @Html.HiddenFor(model => model.SelectedBilDetail.BillDetailID)
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.BillCode, "BillCode", htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @{
+                                                            int newbillcode = 0;
+
+                                                            if (Request.QueryString["newbd"] == "true") { newbillcode = Convert.ToInt32(Request.Url.Segments.Last()); } else { if (Model.SelectedBilDetail != null) { newbillcode = Convert.ToInt32(Model.SelectedBilDetail.BillCode); } }
+                                                        }
+
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.BillCode, new { htmlAttributes = new { @class = "form-control", @Value = newbillcode, @readonly = "readonly", @style = "cursor:no-drop;" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.BillCode, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.LineType, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.LineType, new { htmlAttributes = new { @class = "form-control", @Value = "Stock", @readonly = "readonly", @style = "cursor:no-drop;" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.LineType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.StockBarcode, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.StockBarcode, new { htmlAttributes = new { @class = "form-control", @Value = @Model.SelectedStock.StockBarcode.ToString(), @readonly = "readonly" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.StockBarcode, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.StockCode, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.StockCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "cursor:no-drop;", @Value = @Model.SelectedStock.StockCode.ToString() } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.StockCode, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.Discript, htmlAttributes: new { @class = "control-label" })
+                                                    @{
+
+                                                        IEnumerable<SelectListItem> StockSelectedList = Model.StockList.Select(item => new SelectListItem { Text = item.StockName, Value = item.StockName });
+                                                    }
+                                                    <div class="">
+                                                        @Html.DropDownListFor(model => model.SelectedBilDetail.Discript, StockSelectedList, StockSelectedList.Where(item => item.Text == Model.SelectedStock.StockName).FirstOrDefault().Text, new { @class = "form-control", @id = "Discript_DropDownList", @onchange = "getStock()", @Value = @Model.SelectedStock.StockName.ToString() })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.Discript, "", new { @class = "text-danger" });
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.UnitType, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @*@Html.EditorFor(model => model.SelectedBilDetail.UnitType, new { htmlAttributes = new { @class = "form-control" } })*@
+
+                                                        @{
+                                                            string selectedListItemText = "";
+                                                            List<SelectListItem> UnitTypeList = new List<SelectListItem>()
+                                                        {
+                                                            new SelectListItem { Text = Model.SelectedStock.StockMainUnitType, Value = Model.SelectedStock.StockMainUnitType },
+                                                            new SelectListItem { Text = Model.SelectedStock.StockSecondUnitType, Value = Model.SelectedStock.StockSecondUnitType },
+                                                            new SelectListItem { Text = Model.SelectedStock.StockThirdUnitType, Value = Model.SelectedStock.StockThirdUnitType },
+                                                        };
+                                                        }
+                                                        @if (Model.SelectedBilDetail == null) { selectedListItemText = ""; } else { selectedListItemText = Model.SelectedBilDetail.UnitType; }
+                                                        @Html.DropDownListFor(model => model.SelectedBilDetail.UnitType, UnitTypeList, selectedListItemText, new { @class = "form-control", @onchange = "UnitPriceUpdate()", @id = "UnitType_DropDownList" })
+
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.UnitType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.IncomingAmount, htmlAttributes: new { @class = "control-label", })
+                                                    <div class="">
+
+
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.IncomingAmount, new { htmlAttributes = new { @class = "form-control", @id = "IncomingAmount_textbox", @onkeyup = "LineTotalAmount()" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.IncomingAmount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.Yield, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.Yield, new { htmlAttributes = new { @class = "form-control", @id = "Yield_textbox", @onkeyup = "LineTotalAmount()" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.Yield, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.UnitPrice, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.UnitPrice, new { htmlAttributes = new { @class = "form-control", @id = "UnitPrice_textbox", @onkeyup = "LineTotalAmount()" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.UnitPrice, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.LineTotalAmount, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.LineTotalAmount, new { htmlAttributes = new { @class = "form-control", @id = "LineTotalAmount_textbox" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.LineTotalAmount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.KdvPercent, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+
+
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.KdvPercent, new { htmlAttributes = new { @class = "form-control", @id = "KdvPercent_textbox", @onkeyup = "LineTotalAmount()", } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.KdvPercent, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.SelectedBilDetail.DiscountPercent, htmlAttributes: new { @class = "control-label" })
+                                                    <div class="">
+
+
+                                                        @Html.EditorFor(model => model.SelectedBilDetail.DiscountPercent, new { htmlAttributes = new { @class = "form-control", @id = "DiscountPercent_textbox", @onkeyup = "LineTotalAmount()" } })
+                                                        @Html.ValidationMessageFor(model => model.SelectedBilDetail.DiscountPercent, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group" style="float:right;">
+                                                    <button type="button" onclick="document.location = '/Bill/Index/'+@Request.Url.Segments.Last()+'';" class="btn btn-danger" data-dismiss="modal">X Close</button>
+                                                    <input type="submit" value="@(SubmitButtonValue)" id="bdsubmitbutton" class="btn @(SubmitButtonClass)" />
+                                                </div>
+                                            </div>
+
+                                                            }
+                                    </div>
+                                    <div class="modal-footer">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                                            }
+                </div>
+               
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
+        })
+
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#EditPopup").trigger("click"); // sayfa açıldığında butona tıklansın
+            //$("[name='bill_sil_button']").trigger("click");
+            //if(i == 1){
+            //  $("button[name='bill_sil_button']").trigger('click')
+            //}
+
+            //alert(i.toString());
+
+
+            document.getElementById('EditPopup').style.visibility = 'hidden'; // gizle
+            document.getElementById('EditPopup').style.display = none; // gizlenen yerdeki kalıbını da sil sayfada kalmasın
+        })
+
+    </script>
+    <script type="text/javascript">
+        function getStock(){
+            var yeni_or_guncelle = "bd="; 
+            var bd = '@(Request.QueryString["bd"])';
+
+            if(document.getElementById('bdsubmitbutton').value == "Kaydet") {yeni_or_guncelle ="newbd=true";} else if('@(Request.QueryString["bd"])' != null)  {yeni_or_guncelle="bd="+bd;}
+
+            document.location = '/Bill/Index/@(Request.Url.Segments.Last())?'+yeni_or_guncelle+'&ds='+document.getElementById('Discript_DropDownList').value+'&page='+@(_page)+'&pageSize=@(_pageSize)';
+        }
+    </script>
+
+    @* FATURA KONTROLLERİ *@
+    @if (Request.Url.Segments.Last() != "Index/" && Request.Url.Segments.Last() != "Index" && Request.Url.Segments.Last() != "Bill" && Request.Url.Segments.Last() != "%5Bobject%20MouseEvent%5D")
+    {
+        int billcode = int.Parse(Request.Url.Segments.Last().ToString());
+        if (Model.BillList.Where(bl => bl.BillCode == billcode).FirstOrDefault().ProcessType == "Alış Faturası")
+        {
+            <script>document.getElementById('IncomingAmount_textbox').disabled=false;</script>
+            <script>document.getElementById('Yield_textbox').disabled=true;</script>
+            <script>if(document.getElementById('IncomingAmount_textbox').value=="")document.getElementById('IncomingAmount_textbox').value="1";</script>
+        }
+        else
+        {
+            <script>document.getElementById('IncomingAmount_textbox').disabled=true</script>
+            <script>document.getElementById('Yield_textbox').disabled=false;</script>
+            <script>if(document.getElementById('Yield_textbox').value=="")document.getElementById('Yield_textbox').value="1";</script>
+            <script>document.getElementById('IncomingAmount_textbox').value="";</script>
+        }
+
+
+    }
+    @* BAŞLANGIÇ DEĞERLERİ *@
+    <script>
+
+        var duzenle_buttonlari=document.getElementsByName("bill_duzenle_button"); // tüm düzenle buttonları pasif
+        for(var i=0;i<duzenle_buttonlari.length;i++){
+            duzenle_buttonlari[i].disabled=true;
+        }
+
+
+        var sil_buttonlari=document.getElementsByName("bill_sil_button"); // tüm sil buttonları pasif
+        for(var i=0;i<sil_buttonlari.length;i++){
+            sil_buttonlari[i].disabled=true;
+        }
+        document.getElementById("bill_duzenle_button bdb"+@(Request.Url.Segments.Last().ToString())).disabled=false; // sadece aktif satırın düzenle butonu sil
+        document.getElementById("bill_sil_button_bdb"+@(Request.Url.Segments.Last().ToString())).disabled=false; // sadece aktif satırın düzenle butonu sil
+
+
+
+        if(document.getElementById('KdvPercent_textbox').value== "") document.getElementById('KdvPercent_textbox').value=0.00;
+        if(document.getElementById('DiscountPercent_textbox').value== "") document.getElementById('DiscountPercent_textbox').value=0.00;
+    </script>
+    <script>
+        function SubmitChange(KaydetOrGuncelle){
+            if(KaydetOrGuncelle){
+                document.getElementById('submitbutton').value='Kaydet';
+            }else{
+                document.getElementById('submitbutton').value='Güncelle';
+            }
+        }
+    </script>
+    @* BAŞLANGIÇ DEĞERLERİ SONU *@
+
+    <script>
+        function DuzenlemeModu(satirno){
+
+            var row_cells3=document.getElementsByClassName("input_edit_Bill");
+
+
+
+            // sadece okunabilir veriler gitsin
+            var row_cells=document.getElementsByClassName("vb"+satirno);
+
+            for(var i=0; i<row_cells.length; i++) {
+                row_cells[i].classList.remove('view_Bill');
+
+                row_cells[i].style.visibility = 'hidden';
+                row_cells[i].style.display = 'none';
+
+            }
+
+            // okunup işlenebilen veriler gelsin
+            var row_cells2=document.getElementsByClassName("ie"+satirno);
+
+            for(var k=0; i<row_cells2.length; i++) {
+
+
+                row_cells2[k].style.visibility = 'visible';
+                row_cells2[k].style.display = 'table-cell';
+
+            }
+            $(".ie"+satirno).removeClass( "input_edit_Bill" )
+        }
+
+        function GoruntulemeModu(satirno){
+
+            // sadece okunabilir veriler gelsin
+            var row_cells=document.getElementsByClassName("vb"+satirno);
+            
+            for(var i=0; i<row_cells.length; i++) {
+                row_cells[i].classList.remove('view_Bill');
+
+                row_cells[i].style.visibility = 'visible';
+                row_cells[i].style.display = 'table-cell';
+
+            }
+            // okunup işlenebilen veriler gitsin
+
+
+            var row_cells5=document.getElementsByClassName("ie"+satirno);
+
+            for(var k=0; i<row_cells5.length; i++) {
+                row_cells5[i].classList.remove('input_edit_Bill');
+
+                row_cells5[k].style.visibility = 'hidden';
+                row_cells5[k].style.display = 'none';
+
+            }
+            $(".vb"+satirno).removeClass( "view_Bill" );
+            $(".ie"+satirno).addClass( "input_edit_Bill" );
+        }
+    </script>
+    <script>
+        // tıklanan tüm <button> etiketleri sayfayı yenilemesin
+        //$("button[name='bill_duzenle_button']").click(function() { return false; });
+    </script>
+    
+</div>
+
+@* FATURA SİLME POPUP EKRANI *@
+
+    <!-- Modal -->
+    <div class="modal fade SilModels"  id="SilModel@(Request.Url.Segments.Last().ToString())" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div style="border-bottom: 1px solid #e5e5e5;border-top-left-radius:6px;border-top-right-radius:6px;background-color:#ff3333;" class="modal-header">
+                    <h5 style="float:left;color:white;font-size:22px;" id="exampleModalLabels">Aşağıdaki Faturayı Silmek İstediğinize Emin Misiniz ?</h5>
+                    <button type="button" class="close" onclick="Link('aktif')" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>İşlem Tarihi</th>
+                                    <th>İşlem Tipi</th>
+                                    <th>Fatura No</th>
+                                    <th>Cari Adı</th>
+                                    <th>Net Borç</th>
+                                    <th>Net Alacak</th>
+                                    <th>Para Birimi</th>
+                                    <th>-İndirim</th>
+                                    <th>+KDV</th>
+                                    <th>Dönem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="tr silinsinmi" class="@aktif_row">
+
+                                   
+                                        @Html.HiddenFor(model => model.SelectedBilll.ProcessDate)
+
+                                        @Html.HiddenFor(model => model.SelectedBilll.ProcessTime)
+                                    <td>
+                                        @Model.SelectedBilll.ProcessDate.Value.ToShortDateString() @Model.SelectedBilll.ProcessTime
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.ProcessType)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.CurrrentCode)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.CurrentName)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.NetDebt)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.NetCredit)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.Currency)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.Discount)
+                                    </td>
+
+                                        @Html.HiddenFor(model => model.SelectedBilll.Expense)
+                                    
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.Kdv)
+                                    </td>
+
+                                        @Html.HiddenFor(model => model.SelectedBilll.KdvType)
+                                    <td>
+                                        @Html.DisplayFor(model => model.SelectedBilll.Term)
+                                    </td>
+
+                                        @Html.HiddenFor(model => model.SelectedBilll.Description)
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="Link('aktif')" data-dismiss="modal">Hayır</button> |
+                    @using (Html.BeginForm("Delete", "Bill", new {  id=Model.SelectedBilll.BillCode}, FormMethod.Post,new { @style = "float:right;margin-left:4px;" }))
+                    {@Html.AntiForgeryToken()
+                        <input type="submit" class="btn btn-danger" value="Evet">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+@*FATURA SİLME POPUP EKRANI SONU*@
+<script>
+
+        function LinkAktifPasif(satirno,billcode,aktifpasif){
+            //alert(aktifpasif);
+            //alert(satirno+" "+billcode+" "+aktifpasif.toString());
+
+            //document.getElementById('tr'+satirno).addEventListener("click", BillDetailYonlendir);
+
+            if(aktifpasif == "onclick"){
+                BillDetailYonlendir(billcode);
+            }
+        }
+        function BillDetailYonlendir(_billcode){
+            document.location = '/Bill/Index/'+_billcode+'?page='+@(_page)+'&pageSize=@(_pageSize)';
+        }
+        function Link(gelen_link){ 
+            if(gelen_link == "pasif"){
+
+                tr_aktifLink = "disabled";
+
+            }else{
+                tr_aktifLink="onclick";
+            }
+            //alert(tr_aktifLink);
+        }
+</script>
