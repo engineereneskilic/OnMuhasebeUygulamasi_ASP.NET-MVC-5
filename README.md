@@ -35,7 +35,7 @@ The **Pre-Accounting Automation** project is a comprehensive software solution d
 ## Features
 
 ### 1. **Extensive Database and Feature Set**
-The system utilizes a database with **27 tables** designed to handle various financial and business operations. This includes support for tracking transactions, customer data, purchase orders, inventory, and more. The application provides several feature windows to manage and view essential data.
+The system utilizes a database with ** over 20+ tables** designed to handle various financial and business operations. This includes support for tracking transactions, customer data, purchase orders, inventory, and more. The application provides several feature windows to manage and view essential data.
 
 ### 2. **Core Accounting Functions**
 #### - **Income and Expense Tracking**
@@ -69,7 +69,7 @@ A **role-based authorization system** is implemented to ensure that only authori
 
 - **Programming Languages**: C#, SQL
 - **Frameworks**: ASP.NET MVC 5, .NET Framework
-- **Database**: SQL Server (27 Tables)
+- **Database**: SQL Server (20+ Tables)
 - **Reporting**: Custom Reports and Data Analysis
 - **Tools & Libraries**: 
   - Entity Framework
