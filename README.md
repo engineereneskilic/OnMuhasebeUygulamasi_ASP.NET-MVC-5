@@ -1,5 +1,5 @@
 # Pre-Accounting Automation (ASP.NET MVC 5 / C# Forms App (.NET Framework))
-
+![**Pre-Accounting Automation (Image)**](pre-account-automation.jpg)  
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
