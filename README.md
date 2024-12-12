@@ -1,4 +1,5 @@
 # Pre-Accounting Automation
+![**Pre-Accounting Automation (Image)**](docs/workflow-diagram.png)  
 
 ## Table of Contents
 - [Project Overview](#project-overview)
