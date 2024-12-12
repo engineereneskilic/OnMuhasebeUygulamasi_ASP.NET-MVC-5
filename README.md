@@ -1,5 +1,5 @@
 # Pre-Accounting Automation (ASP.NET MVC 5 / C# Forms App (.NET Framework)) - TERM PROJECT - OVER +20 TABLES
-![**Pre-Accounting Automation (Image)**](pre-account-automation.jpg)  
+![**Pre-Accounting Automation (Image)**](pre-account-automation2.jpg)  
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
